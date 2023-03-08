@@ -17,7 +17,7 @@ const EditUser = () => {
     const updateUser = async (e) => {
         e.preventDefault();
         try {
-            await axios.patch(`http://localhost:8000/users/${id}`, {
+            await axios.patch(`https://api-skripsi.vercel.app/${id}`, {
                 nama,
                 email,
                 gender,

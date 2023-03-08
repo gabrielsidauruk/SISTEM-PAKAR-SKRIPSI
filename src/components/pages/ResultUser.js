@@ -116,7 +116,7 @@ const ResultUser = () => {
     }, [])
 
     const getUserById = async () => {
-        const response = await axios.get(`http://localhost:8000/users/${id}`)
+        const response = await axios.get(`https://api-skripsi.vercel.app/${id}`)
         setNama(response.data.nama);
         setEmail(response.data.email);
         setGender(response.data.gender);

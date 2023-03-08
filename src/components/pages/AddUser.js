@@ -10,7 +10,7 @@ const AddUser = () => {
     const saveUser = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:8000/users', {
+            await axios.post('https://api-skripsi.vercel.app/users', {
                 nama,
                 email,
                 gender,

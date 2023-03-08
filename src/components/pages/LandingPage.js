@@ -5,8 +5,8 @@ import './LandingPage.css'
 const LandingPage = () => {
 
     return (
-        <section className='backgroundimg' >
-            <section className='hero is-fullheight'>
+        <section className='backgroundimg'>
+            <section className='column is-full' >
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia"></link>
                 <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500&display=swap" rel="stylesheet"></link>
                 <link href="https://fonts.googleapis.com/css2?family=Tilt+Neon&display=swap" rel="stylesheet"></link>
@@ -24,6 +24,7 @@ const LandingPage = () => {
 
                     <Link className='button is-rounded is-success is-large mt-6' to='/perhitungan'>MULAI</Link>
                 </div>
+                <br /><br /><br /><br />
             </section>
         </section >
     )
