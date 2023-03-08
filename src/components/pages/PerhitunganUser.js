@@ -27,11 +27,11 @@ const PerhitunganUser = () => {
     const [kec9, setKec9] = useState(0);
     const navigate = useNavigate();
     const getUsers = async () => {
-        const response = await axios.get('http://localhost:8000/users');
+        const response = await axios.get('https://api-skripsi.vercel.app/users');
         setUser(response.data);
     }
     const getQuest = async () => {
-        const response = await axios.get('http://localhost:8000/pertanyaan');
+        const response = await axios.get('https://api-skripsi.vercel.app/pertanyaan');
         setQuest(response.data)
     }
     const saveUser = async (e) => {
@@ -42,7 +42,7 @@ const PerhitunganUser = () => {
                 try {
                     console.log("user already exist")
                     let b = users.find(e => e.email === email)
-                    await axios.patch(`http://localhost:8000/users/${b.id}`, {
+                    await axios.patch(`https://api-skripsi.vercel.app/users/${b.id}`, {
                         nama,
                         email,
                         gender,
@@ -64,7 +64,7 @@ const PerhitunganUser = () => {
             } else {
                 console.log("email belum terdaftar")
                 try {
-                    await axios.post('http://localhost:8000/users', {
+                    await axios.post('https://api-skripsi.vercel.app/users', {
                         nama,
                         email,
                         gender,
