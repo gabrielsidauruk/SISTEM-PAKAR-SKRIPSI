@@ -1,0 +1,4 @@
+.backgroundimg {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.2)), url(../../assets/img/landing.png);
+    background-size: 100%;
+}
