@@ -65,7 +65,7 @@ const UserList = () => {
                     </div>
                 </div>
             </section>
-            <div className={displayText ? 'column is-centered' : 'is-hidden'}>
+            <div className={displayText ? 'column is-centered' : 'is-hidden'} style={{ overflowX: "auto" }}>
                 <Link to={`adduser`} className='button is-small is-success'>Tambah User</Link>
                 <table className='table is-striped is-narrow is-bordered is-hoverable'>
                     <thead>
