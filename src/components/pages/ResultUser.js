@@ -183,7 +183,7 @@ const ResultUser = () => {
                     </div>
                 </div>
                 {/* column2 */}
-                <div className='box column' style={{ backgroundColor: "#2C74B3" }}>
+                <div className='box column' style={{ backgroundColor: "#2C74B3", overflowX: "auto" }}>
                     <div className='column' style={{ overflowX: "auto" }}>
                         <table className='table is-bordered is-striped is-narrow '>
                             <thead>
@@ -325,8 +325,8 @@ const ResultUser = () => {
                     </p>
                 </div>
             </div>
-            <div className={displayText ? 'column is-half is-offset-one-quarter' : 'column is-three-fifths is-offset-one-fifth'}>
-                <div className={displayText ? 'mt-5 is-hidden' : 'mt-5 '} style={{ overflowX: "auto" }}>
+            <div className={displayText ? 'column is-half is-offset-one-quarter' : 'column is-three-fifths is-offset-one-fifth'} style={{ overflowX: "auto" }}>
+                <div className={displayText ? 'mt-5 is-hidden' : 'mt-5 '} >
                     <table className='box  table is-fullwidth'>
                         <tbody>
                             <tr>
