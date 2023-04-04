@@ -11,13 +11,15 @@ const UserList = () => {
     }, []);
 
     const getUsers = async () => {
-        const response = await axios.get('https://api-skripsi.vercel.app/users');
+        // const response = await axios.get('https://api-skripsi.vercel.app/users');
+        const response = await axios.get('http://localhost:8000/users');
         setUser(response.data);
     }
 
     const deleteUser = async (id) => {
         try {
-            await axios.delete(`https://api-skripsi.vercel.app/users/${id}`);
+            // await axios.delete(`https://api-skripsi.vercel.app/users/${id}`);
+            await axios.delete(`http://localhost:8000/users/${id}`);
             getUsers();
         } catch (error) {
             console.log(error);
@@ -83,6 +85,8 @@ const UserList = () => {
                             <th>Kec7</th>
                             <th>Kec8</th>
                             <th>Kec9</th>
+                            <th>Referensi</th>
+                            <th>Valid</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -102,6 +106,8 @@ const UserList = () => {
                                 <td>{user.kec7}</td>
                                 <td>{user.kec8}</td>
                                 <td>{user.kec9}</td>
+                                <td>{user.refer}</td>
+                                <td>{user.valid}</td>
                                 <td>
                                     <Link to={`/edituser/${user.id}`} className='button is-small is-info is-rounded'> Edit</Link> &ensp;
                                     <button onClick={() => deleteUser(user.id)} className='button is-small is-danger is-rounded'> Delete</button> &ensp;

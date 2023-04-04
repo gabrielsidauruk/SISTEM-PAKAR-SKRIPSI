@@ -25,13 +25,14 @@ const PerhitunganUser = () => {
     const [kec7, setKec7] = useState(0);
     const [kec8, setKec8] = useState(0);
     const [kec9, setKec9] = useState(0);
+
     const navigate = useNavigate();
     const getUsers = async () => {
-        const response = await axios.get('https://api-skripsi.vercel.app/users');
+        const response = await axios.get('http://localhost:8000/users');
         setUser(response.data);
     }
     const getQuest = async () => {
-        const response = await axios.get('https://api-skripsi.vercel.app/pertanyaan');
+        const response = await axios.get('http://localhost:8000/pertanyaan');
         setQuest(response.data)
     }
     const saveUser = async (e) => {
@@ -42,7 +43,7 @@ const PerhitunganUser = () => {
                 try {
                     console.log("user already exist")
                     let b = users.find(e => e.email === email)
-                    await axios.patch(`https://api-skripsi.vercel.app/users/${b.id}`, {
+                    await axios.patch(`http://localhost:8000/users/${b.id}`, {
                         nama,
                         email,
                         gender,
@@ -55,6 +56,7 @@ const PerhitunganUser = () => {
                         kec7,
                         kec8,
                         kec9,
+                        refer
                     });
                     getUsers();
                     navigate(`/resultuser/${b.id}`);
@@ -64,7 +66,7 @@ const PerhitunganUser = () => {
             } else {
                 console.log("email belum terdaftar")
                 try {
-                    await axios.post('https://api-skripsi.vercel.app/users', {
+                    await axios.post('http://localhost:8000/users', {
                         nama,
                         email,
                         gender,
@@ -77,6 +79,7 @@ const PerhitunganUser = () => {
                         kec7,
                         kec8,
                         kec9,
+                        refer
                     });
                     getUsers();
                     console.log(users.find(e => e.email === email))
@@ -95,7 +98,6 @@ const PerhitunganUser = () => {
     const [checkedState, setCheckedState] = useState(
         new Array(109).fill(false)
     );
-
     const changecb = (position) => {
         const updatedCheckedState = checkedState.map((item, index) =>
             index === position ? !item : item
@@ -157,6 +159,74 @@ const PerhitunganUser = () => {
             }
         }
     }
+    const referArray = [
+        {
+            value: "A",
+            name: "Bahasa Inggris"
+        },
+        {
+            value: "B",
+            name: "Matematika"
+        },
+        {
+            value: "C",
+            name: "Kedokteran"
+        },
+        {
+            value: "D",
+            name: "Teknik Mesin"
+        },
+        {
+            value: "E",
+            name: "Pendidikan Guru Sekolah Dasar"
+        },
+        {
+            value: "F",
+            name: "Psikologi"
+        },
+        {
+            value: "G",
+            name: "Desain Komunikasi Visual"
+        },
+        {
+            value: "H",
+            name: "Hubungan Internasional"
+        },
+        {
+            value: "I",
+            name: "Kimia"
+        },
+        {
+            value: "J",
+            name: "Farmasi"
+        },
+        {
+            value: "K",
+            name: "Teknik Arsitektur"
+        },
+        {
+            value: "L",
+            name: "Pendidikan Jasmani, Olahraga dan Kesehatan"
+        },
+        {
+            value: "M",
+            name: "Ilmu Sejarah"
+        },
+        {
+            value: "N",
+            name: "Seni Musik"
+        }
+    ];
+    const [checkedRefer, setCheckedRefer] = useState([]);
+    const changeRefer = e => {
+        const { value, checked } = e.target;
+        if (checked) {
+            setCheckedRefer(prev => [...prev, value])
+        } else {
+            setCheckedRefer(prev => prev.filter(x => x !== value))
+        }
+    };
+    const refer = checkedRefer.length ? checkedRefer.join("") : "";
     const [active1, setactive1] = useState(false)
     const [active2, setactive2] = useState()
     const [active3, setactive3] = useState()
@@ -235,7 +305,30 @@ const PerhitunganUser = () => {
                                 </div>
                             </div>
                         </div>
-
+                        <div className='field'>
+                            <label className='label'>Referensi Jurusan (Pilih 3 yang menurutmu paling sesuai dengan kemampuanmu!)</label>
+                            <div className='column' >
+                                {`Item jurusan yang dipilih : ${refer}`}
+                                <table>
+                                    <br />
+                                    <td style={{ paddingRight: "40px" }}>{referArray.slice(0, 7).map((item, index) => (
+                                        <div key={index} >
+                                            <input value={item.value} type="checkbox" onChange={changeRefer} />
+                                            <span>{item.name}</span>
+                                        </div>
+                                    ))}</td>
+                                    <td >{referArray.slice(7, 14).map((item, index) => (
+                                        <div key={index} >
+                                            <input value={item.value} type="checkbox" onChange={changeRefer} />
+                                            <span>{item.name}</span>
+                                        </div>
+                                    ))}</td>
+                                </table>
+                            </div>
+                        </div>
+                        <div className='is-size-4'>
+                            Centanglah box apabila anda setuju dengan pernyataan tersebut!
+                        </div>
                         {active1 ? <div className={active2 ? "is-hidden" : ""}>
                             <progress class="progress is-info" value="20" max="100">20%</progress>
                             {quest.slice(0, 18).map((q) => {
@@ -416,7 +509,7 @@ const PerhitunganUser = () => {
                                     className='button is-danger is-fullwidth'
                                     onClick={() => setactive5(!active5)}> BACK
                                 </button>
-                                <button type='submit' className='button is-success is-fullwidth'> SUBMIT </button>
+                                <button type='submit' className='button is-success is-fullwidth' > SUBMIT </button>
                             </div>
                         </div> : ""}
                     </form>

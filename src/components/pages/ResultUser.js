@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 
 
 const ResultUser = () => {
+    useEffect(() => {
+        getUserById();
+    }, [])
+    useEffect(() => {
+        val();
+    })
     const [nama, setNama] = useState("");
     const [email, setEmail] = useState("");
     const [gender, setGender] = useState("");
@@ -16,12 +22,15 @@ const ResultUser = () => {
     const [kec7, setKec7] = useState("");
     const [kec8, setKec8] = useState("");
     const [kec9, setKec9] = useState("");
+    const [refer, setRefer] = useState("");
+    const [valid, setValid] = useState("");
+    var valCheck;
     const { id } = useParams();
 
     const beliefJurusan1 = [];
     const beliefJurusan2 = [];
 
-    const keyJurusan1 = ["AEFHM", "BCDE", "N",
+    const keyJurusan1 = ["AEFHM", "BCDEJ", "N",
         "BDGIK", "EL", "EF", "CEFHMN", "M", "F", "ø", "E", "BD", "EFHM"];
 
     const keyJurusan2 = ["AEFH", "BCDEGIJK", "N",
@@ -101,22 +110,58 @@ const ResultUser = () => {
 
         return pla
     }
-
+    function val() {
+        setValid(valCheck)
+    }
+    function checkVAL() {
+        setDisplayValid(true)
+    }
+    var valCheckTrue;
+    function checkVALTrue() {
+        setDisplayValidTrue(valCheckTrue)
+    }
     function result(bel, key) {
         bel.splice(20);
-        const max = bel.reduce((a, b) => Math.max(a, b), -Infinity)
-        let i = bel.indexOf(max)
+        var belcopy = [...bel];
+        belcopy.sort(function (a, b) { return b - a });
+        let i = bel.indexOf(belcopy[0])
+        let j = bel.indexOf(belcopy[1])
+        var a = refer;
+        let arr1 = key[i].split("");
+        let arr2 = key[j].split("");
+        for (let i = 0; i < 9; i++) {
+            if (a.includes(arr1[i]) || a.includes(arr2[i])) {
+                valCheck = "Yes1";
+                valCheckTrue = true;
+
+                break;
+            }
+            valCheck = "No1";
+            valCheckTrue = false;
+        }
         return (
-            <p>{key[i]}={bel[i]}<br></br></p>
+            <p>{key[i]}={bel[i]}<br></br>
+                {key[j]}={bel[j]}<br></br></p>
         )
     }
 
-    useEffect(() => {
-        getUserById();
-    }, [])
+    const navigate = useNavigate();
+    const postValidbyId = async () => {
+        try {
+            val();
+            checkVAL();
+            checkVALTrue();
+            await axios.patch(`http://localhost:8000/users/${id}`, {
+                valid
+            });
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
 
     const getUserById = async () => {
-        const response = await axios.get(`https://api-skripsi.vercel.app/users/${id}`)
+        const response = await axios.get(`http://localhost:8000/users/${id}`)
         setNama(response.data.nama);
         setEmail(response.data.email);
         setGender(response.data.gender);
@@ -129,8 +174,13 @@ const ResultUser = () => {
         setKec7(response.data.kec7);
         setKec8(response.data.kec8);
         setKec9(response.data.kec9);
+        setRefer(response.data.refer);
+        setValid(response.data.valid);
     }
-    const [displayText, setDisplayText] = useState(true)
+    const [displayText, setDisplayText] = useState(true);
+    const [displayValid, setDisplayValid] = useState(false);
+    const [displayValidTrue, setDisplayValidTrue] = useState(false);
+
     return (
         <div style={{ backgroundColor: "#E6D2AA" }}>
             <div className='columns' style={{ backgroundColor: "#007873" }} >
@@ -171,110 +221,107 @@ const ResultUser = () => {
                             </input>
                         </div>
                     </div>
-                    <div className='field'>
+                    <div className='column field'>
                         <button
                             type="button"
                             className='button is-info'
                             value='Perhitungan'
                             onClick={() => setDisplayText(!displayText)}>
                             {displayText ? "Perhitungan" : "Hasil"}
-
                         </button>
                     </div>
                 </div>
                 {/* column2 */}
-                <div className='box column' style={{ backgroundColor: "#2C74B3", overflowX: "auto" }}>
-                    <div className='column' style={{ overflowX: "auto" }}>
-                        <table className='table is-bordered is-striped is-narrow '>
-                            <thead>
-                                <tr >
-                                    <th className='has-text-centered'>Jenis Kecerdasan</th>
-                                    <th className='has-text-centered'>Skor Hasil</th>
-                                    <th className='has-text-centered'>Belief</th>
-                                    <th className='has-text-centered'>Plausibility</th>
-                                    <th className='has-text-centered'>Kode Jurusan Pakar 1</th>
-                                    <th className='has-text-centered'>Kode Jurusan Pakar 2</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>LINGUISTIC / VERBAL</td>
-                                    <td>{kec1}</td>
-                                    <td>{belief(kec1)}</td>
-                                    <td>{plausibility(window.bel)}</td>
-                                    <td> {keyJurusan1[0]}</td>
-                                    <td> {keyJurusan2[0]}</td>
-                                </tr>
-                                <tr>
-                                    <td>LOGICAL / MATHEMATICAL</td>
-                                    <td>{kec2}</td>
-                                    <td>{belief(kec2)}</td>
-                                    <td>{plausibility(belief(kec2))}</td>
-                                    <td> {keyJurusan1[1]}</td>
-                                    <td> {keyJurusan2[1]}</td>
-                                </tr>
-                                <tr>
-                                    <td>MUSICAL</td>
-                                    <td>{kec3}</td>
-                                    <td>{belief(kec3)}</td>
-                                    <td>{plausibility(belief(kec3))}</td>
-                                    <td> {keyJurusan1[2]}</td>
-                                    <td> {keyJurusan2[2]}</td>
-                                </tr>
-                                <tr>
-                                    <td>SPATIAL / VISUAL</td>
-                                    <td>{kec4}</td>
-                                    <td>{belief(kec4)}</td>
-                                    <td>{plausibility(belief(kec4))}</td>
-                                    <td> {keyJurusan1[3]}</td>
-                                    <td> {keyJurusan2[3]}</td>
-                                </tr>
-                                <tr>
-                                    <td>BODIL / KINESTHETIC</td>
-                                    <td>{kec5}</td>
-                                    <td>{belief(kec5)}</td>
-                                    <td>{plausibility(belief(kec5))}</td>
-                                    <td> {keyJurusan1[4]}</td>
-                                    <td> {keyJurusan2[4]}</td>
-                                </tr>
-                                <tr>
-                                    <td>INTRAPERSONAL</td>
-                                    <td>{kec6}</td>
-                                    <td>{belief(kec6)}</td>
-                                    <td>{plausibility(belief(kec6))}</td>
-                                    <td> {keyJurusan1[5]}</td>
-                                    <td> {keyJurusan2[5]}</td>
-                                </tr>
-                                <tr>
-                                    <td>INTERPERSONAL</td>
-                                    <td>{kec7}</td>
-                                    <td>{belief(kec7)}</td>
-                                    <td>{plausibility(belief(kec7))}</td>
-                                    <td> {keyJurusan1[6]}</td>
-                                    <td> {keyJurusan2[6]}</td>
-                                </tr>
-                                <tr>
-                                    <td>NATURALIST</td>
-                                    <td>{kec8}</td>
-                                    <td>{belief(kec8)}</td>
-                                    <td>{plausibility(belief(kec8))}</td>
-                                    <td> {keyJurusan1[7]}</td>
-                                    <td> {keyJurusan2[7]}</td>
-                                </tr>
-                                <tr>
-                                    <td>EXISTENTIAL</td>
-                                    <td>{kec9}</td>
-                                    <td>{belief(kec9)}</td>
-                                    <td>{plausibility(belief(kec9))}</td>
-                                    <td> {keyJurusan1[8]}</td>
-                                    <td> {keyJurusan2[8]}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
+                <div className='box column is-5' style={{ backgroundColor: "#2C74B3", overflowX: "auto" }}>
+                    <table className='table is-bordered is-striped is-narrow mt-4 '>
+                        <thead>
+                            <tr >
+                                <th className='has-text-centered'>Jenis Kecerdasan</th>
+                                <th className='has-text-centered'>Skor Hasil</th>
+                                <th className='has-text-centered'>Belief</th>
+                                <th className='has-text-centered'>Plausibility</th>
+                                <th className='has-text-centered'>Kode Jurusan Pakar 1</th>
+                                <th className='has-text-centered'>Kode Jurusan Pakar 2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>LINGUISTIC / VERBAL</td>
+                                <td>{kec1}</td>
+                                <td>{belief(kec1)}</td>
+                                <td>{plausibility(window.bel)}</td>
+                                <td> {keyJurusan1[0]}</td>
+                                <td> {keyJurusan2[0]}</td>
+                            </tr>
+                            <tr>
+                                <td>LOGICAL / MATHEMATICAL</td>
+                                <td>{kec2}</td>
+                                <td>{belief(kec2)}</td>
+                                <td>{plausibility(belief(kec2))}</td>
+                                <td> {keyJurusan1[1]}</td>
+                                <td> {keyJurusan2[1]}</td>
+                            </tr>
+                            <tr>
+                                <td>MUSICAL</td>
+                                <td>{kec3}</td>
+                                <td>{belief(kec3)}</td>
+                                <td>{plausibility(belief(kec3))}</td>
+                                <td> {keyJurusan1[2]}</td>
+                                <td> {keyJurusan2[2]}</td>
+                            </tr>
+                            <tr>
+                                <td>SPATIAL / VISUAL</td>
+                                <td>{kec4}</td>
+                                <td>{belief(kec4)}</td>
+                                <td>{plausibility(belief(kec4))}</td>
+                                <td> {keyJurusan1[3]}</td>
+                                <td> {keyJurusan2[3]}</td>
+                            </tr>
+                            <tr>
+                                <td>BODIL / KINESTHETIC</td>
+                                <td>{kec5}</td>
+                                <td>{belief(kec5)}</td>
+                                <td>{plausibility(belief(kec5))}</td>
+                                <td> {keyJurusan1[4]}</td>
+                                <td> {keyJurusan2[4]}</td>
+                            </tr>
+                            <tr>
+                                <td>INTRAPERSONAL</td>
+                                <td>{kec6}</td>
+                                <td>{belief(kec6)}</td>
+                                <td>{plausibility(belief(kec6))}</td>
+                                <td> {keyJurusan1[5]}</td>
+                                <td> {keyJurusan2[5]}</td>
+                            </tr>
+                            <tr>
+                                <td>INTERPERSONAL</td>
+                                <td>{kec7}</td>
+                                <td>{belief(kec7)}</td>
+                                <td>{plausibility(belief(kec7))}</td>
+                                <td> {keyJurusan1[6]}</td>
+                                <td> {keyJurusan2[6]}</td>
+                            </tr>
+                            <tr>
+                                <td>NATURALIST</td>
+                                <td>{kec8}</td>
+                                <td>{belief(kec8)}</td>
+                                <td>{plausibility(belief(kec8))}</td>
+                                <td> {keyJurusan1[7]}</td>
+                                <td> {keyJurusan2[7]}</td>
+                            </tr>
+                            <tr>
+                                <td>EXISTENTIAL</td>
+                                <td>{kec9}</td>
+                                <td>{belief(kec9)}</td>
+                                <td>{plausibility(belief(kec9))}</td>
+                                <td> {keyJurusan1[8]}</td>
+                                <td> {keyJurusan2[8]}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div className='box column mt-1' style={{ backgroundColor: "#FF7D7D" }}>
+                {/* columnn3 */}
+                <div className='column' style={{ backgroundColor: "#FF7D7D" }}>
                     <p> Keterangan : <br />
                         <table>
                             <tbody>
@@ -1668,10 +1715,22 @@ const ResultUser = () => {
                             <td>{result(beliefJurusan1, keyJurusan1)}</td>
                             <td>{result(beliefJurusan2, keyJurusan2)}</td>
                         </tr>
+                        <tr>
+                            {console.log(valid)}
+                            <td colSpan='2'><p>Referensi Jurusanmu : {refer} ({displayValid ? displayValidTrue ? "Sesuai dengan referensi pilihan" : "Tidak sesuai dengan referensi pilihan" : "Belum divalidasi"}) </p>
+                                <button
+                                    className="button is-success is-small"
+                                    type="button"
+                                    value='Validasi'
+                                    onClick={() => postValidbyId()}> Cek Validasi
+                                </button>
+                            </td>
+                        </tr>
                     </tbody>
                     <br />
                 </table>
             </div>
+
         </div >
     )
 
