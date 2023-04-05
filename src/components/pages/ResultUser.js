@@ -131,12 +131,12 @@ const ResultUser = () => {
         let arr2 = key[j].split("");
         for (let i = 0; i < 9; i++) {
             if (a.includes(arr1[i]) || a.includes(arr2[i])) {
-                valCheck = "Yes1";
+                valCheck = "Yes";
                 valCheckTrue = true;
 
                 break;
             }
-            valCheck = "No1";
+            valCheck = "No";
             valCheckTrue = false;
         }
         return (
