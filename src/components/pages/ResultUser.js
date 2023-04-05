@@ -151,7 +151,7 @@ const ResultUser = () => {
             val();
             checkVAL();
             checkVALTrue();
-            await axios.patch(`http://localhost:8000/users/${id}`, {
+            await axios.patch(`https://api-skripsi.vercel.app/users/${id}`, {
                 valid
             });
         } catch (error) {
@@ -161,7 +161,7 @@ const ResultUser = () => {
     }
 
     const getUserById = async () => {
-        const response = await axios.get(`http://localhost:8000/users/${id}`)
+        const response = await axios.get(`https://api-skripsi.vercel.app/users/${id}`)
         setNama(response.data.nama);
         setEmail(response.data.email);
         setGender(response.data.gender);

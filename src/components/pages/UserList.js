@@ -12,14 +12,14 @@ const UserList = () => {
 
     const getUsers = async () => {
         // const response = await axios.get('https://api-skripsi.vercel.app/users');
-        const response = await axios.get('http://localhost:8000/users');
+        const response = await axios.get('https://api-skripsi.vercel.app/users');
         setUser(response.data);
     }
 
     const deleteUser = async (id) => {
         try {
             // await axios.delete(`https://api-skripsi.vercel.app/users/${id}`);
-            await axios.delete(`http://localhost:8000/users/${id}`);
+            await axios.delete(`https://api-skripsi.vercel.app/users/${id}`);
             getUsers();
         } catch (error) {
             console.log(error);
