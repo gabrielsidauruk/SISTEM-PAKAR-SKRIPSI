@@ -28,7 +28,7 @@ const PerhitunganUser = () => {
 
     const navigate = useNavigate();
     const getUsers = async () => {
-        const response = await axios.get('https://api-skripsi.vercel.app//users');
+        const response = await axios.get('https://api-skripsi.vercel.app/users');
         setUser(response.data);
     }
     const getQuest = async () => {
