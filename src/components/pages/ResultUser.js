@@ -33,9 +33,22 @@ const ResultUser = () => {
     const keyJurusan1 = ["AEFHM", "BCDEJ", "N",
         "BDGIK", "EL", "EF", "CEFHMN", "M", "F", "ø", "E", "BD", "EFHM"];
 
+    const namaJurusan1 = ["Bahasa Inggris,PGSD,Psikologi,Hub Internasional,Ilmu Sejarah",
+        "Matematika,Kedokteran,Teknik Mesin,PGSD,Farmasi", "Seni Musik", "Matematika,Teknik Mesin,DKV,Kimia,Teknik Arsitektur", "PGSD,PJOK"
+        , "PGSD,Psikologi", "Kedokteran,PGSD,Psikologi,Hubungan Internasional,Ilmu Sejarah,Seni Musik", "Ilmu Sejarah", "Psikologi",
+        "err", "PGSD", "Matematika,Teknik Mesin", "PGSD,Psikologi,Hubungan Internasional,Ilmu Sejarah"]
+
+
     const keyJurusan2 = ["AEFH", "BCDEGIJK", "N",
         "CDGIJKM", "LN", "EF", "CEFHL", "JM", "", "ø", "E", "CDGIJK", "EFH"
         , "CE", "C", "L", "J"];
+
+    const namaJurusan2 = ["Bahasa Inggris,PGSD,Psikologi,Hubungan Internasional",
+        "Matematika,Kedokteran,Teknik Mesin,PGSD,DKV,Kimia,Farmasi,Teknik Arsitektur", "Seni Musik", "Kedokteran,Teknik Mesin,DKV,Kimia,Farmasi,Teknik Arsitektur,Ilmu Sejarah",
+        "PJOK,Seni Musik", "PGSD,Psikologi", "Kedokteran,PGSD,Psikologi,Hubungan Internasional,PJOK", "Farmasi,Ilmu Sejarah", "",
+        "err", "PGSD", "Kedokteran,Teknik Mesin,DKV,Kimia,Farmasi,Teknik Arsitektur", "PGSD,Psikologi,Hubungan Internasional", "Kedokteran,PGSD",
+        "Kedokteran", "PJOK", "Farmasi"]
+
 
     beliefJurusan2.push(belief(kec1), belief(kec2), belief(kec3), belief(kec4),
         belief(kec5), belief(kec6), belief(kec7), belief(kec8));
@@ -120,7 +133,7 @@ const ResultUser = () => {
     function checkVALTrue() {
         setDisplayValidTrue(valCheckTrue)
     }
-    function result(bel, key) {
+    function result(bel, key, namjur) {
         bel.splice(20);
         var belcopy = [...bel];
         belcopy.sort(function (a, b) { return b - a });
@@ -140,12 +153,10 @@ const ResultUser = () => {
             valCheckTrue = false;
         }
         return (
-            <p>{key[i]}={bel[i]}<br></br>
-                {key[j]}={bel[j]}<br></br></p>
+            <p>{key[i]}({namjur[i]})={bel[i]}<br></br>
+                {key[j]}({namjur[j]})={bel[j]}<br></br></p>
         )
     }
-
-    const navigate = useNavigate();
     const postValidbyId = async () => {
         try {
             val();
@@ -1712,8 +1723,8 @@ const ResultUser = () => {
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{result(beliefJurusan1, keyJurusan1)}</td>
-                            <td>{result(beliefJurusan2, keyJurusan2)}</td>
+                            <td>{result(beliefJurusan1, keyJurusan1, namaJurusan1)}</td>
+                            <td>{result(beliefJurusan2, keyJurusan2, namaJurusan2)}</td>
                         </tr>
                         <tr>
                             {console.log(valid)}
